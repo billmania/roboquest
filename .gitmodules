@@ -1,6 +1,0 @@
-[submodule "ros2ws/src/roboquest_core"]
-        path = ros2ws/src/roboquest_core
-        url = git@github.com:billmania/roboquest_core.git
-[submodule "ros2ws/src/roboquest_ui"]
-        path = ros2ws/src/roboquest_ui
-        url = git@github.com:billmania/roboquest_ui.git
