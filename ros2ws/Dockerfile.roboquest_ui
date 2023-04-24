@@ -1,0 +1,35 @@
+FROM ros:humble-ros-base
+
+LABEL version="1"
+LABEL description="ROS2 RoboQuest frontend"
+LABEL maintainer="Bill Mania <bill@manialabs.us>"
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN echo "America/Los_Angeles" > /etc/timezone
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
+
+SHELL ["/bin/bash", "--login", "-c"]
+RUN apt-get update \
+    && apt-get dist-upgrade -y
+RUN apt-get install -y \
+    apt-utils \
+    vim \
+    v4l-utils
+RUN apt-get install -y \
+    python3-colcon-ros \
+    nodejs \
+    npm
+
+RUN ln -sf /bin/bash /bin/sh
+RUN useradd -ms /bin/bash roboquest
+RUN chown roboquest /usr/src
+USER roboquest
+WORKDIR /usr/src
+RUN npm i rclnodejs \
+    && npm i rclnodejs-cli
+
+WORKDIR /usr/src/ros2ws
+COPY src/roboquest_ui src/roboquest_ui/
+
+CMD ["/bin/bash", "--login"]
