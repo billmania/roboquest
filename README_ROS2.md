@@ -15,6 +15,7 @@ docker build -t roboquest_core -f Dockerfile.roboquest_core .
 5. Start the container
 ```
 docker run -it --rm \
+    --network host \
     --device /dev/gpiomem \
     --device /dev/ttyS0 \
     --name roboquest_core \
