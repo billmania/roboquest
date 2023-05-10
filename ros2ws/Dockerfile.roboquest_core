@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="2"
+LABEL version="4"
 LABEL description="ROS2 RoboQuest backend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -29,5 +29,8 @@ RUN mkdir src
 
 COPY src/roboquest_core src/roboquest_core/
 COPY src/rq_msgs src/rq_msgs/
+
+RUN source /opt/ros/humble/setup.bash \
+    && colcon build
 
 CMD ["/bin/bash", "--login"]
