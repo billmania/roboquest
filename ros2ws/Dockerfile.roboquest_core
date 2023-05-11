@@ -33,4 +33,4 @@ COPY src/rq_msgs src/rq_msgs/
 RUN source /opt/ros/humble/setup.bash \
     && colcon build
 
-CMD ["/bin/bash", "--login"]
+ENTRYPOINT ["/bin/bash", "--login"]

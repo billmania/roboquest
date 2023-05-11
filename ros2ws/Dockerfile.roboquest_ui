@@ -33,9 +33,12 @@ RUN echo "PATH=$PATH:/usr/local/node-v18.16.0-linux-arm64/bin" >> /etc/profile
 RUN ln -sf /bin/bash /bin/sh
 RUN useradd -ms /bin/bash roboquest
 RUN chown roboquest /usr/src
-USER roboquest
 
 WORKDIR /usr/src/ros2ws/src
+RUN chown roboquest /usr/src/ros2ws \
+    && chown roboquest /usr/src/ros2ws/src
+
+USER roboquest
 
 RUN git clone -b main https://github.com/billmania/roboquest_ui.git
 RUN git clone -b main https://github.com/billmania/rq_msgs.git
@@ -65,4 +68,4 @@ WORKDIR /usr/src/ros2ws
 RUN colcon build --packages-select rq_msgs roboquest_ui
 
 WORKDIR /usr/src/ros2ws
-CMD ["/bin/bash", "--login"]
+ENTRYPOINT ["/bin/bash", "--login"]
