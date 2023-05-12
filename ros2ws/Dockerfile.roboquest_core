@@ -1,13 +1,17 @@
 FROM ros:humble-ros-base
 
-LABEL version="4"
-LABEL description="ROS2 RoboQuest backend"
+LABEL version="6"
+LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN echo "America/Los_Angeles" > /etc/timezone
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
+
+RUN ln -sf /bin/bash /bin/sh
+RUN useradd -ms /bin/bash roboquest
+RUN chown roboquest /usr/src
 
 SHELL ["/bin/bash", "--login", "-c"]
 RUN apt-get update \

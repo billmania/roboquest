@@ -19,9 +19,14 @@ docker-compose build
 ```
 5. Start the containers
     1. docker
+    ROS2 uses shared memory to communicate between nodes on the same host. Both
+    containers must execute as the same user, in order to use shared memory.
+
 ```
 docker run -it --rm \
     --network host \
+    --ipc host \
+    -v /dev/shm:/dev/shm \
     --device /dev/gpiomem \
     --device /dev/ttyS0 \
     --name roboquest_core \
@@ -31,4 +36,3 @@ docker run -it --rm \
 ```
 docker-compose up -d
 ```
-

@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="4"
+LABEL version="5"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -30,17 +30,23 @@ WORKDIR /usr/local
 RUN tar xzf /tmp/node-v18.16.0-linux-arm64.tar.gz
 RUN echo "PATH=$PATH:/usr/local/node-v18.16.0-linux-arm64/bin" >> /etc/profile
 
-RUN ln -sf /bin/bash /bin/sh
-RUN useradd -ms /bin/bash roboquest
-RUN chown roboquest /usr/src
-
 WORKDIR /usr/src/ros2ws/src
-RUN chown roboquest /usr/src/ros2ws \
-    && chown roboquest /usr/src/ros2ws/src
 
-USER roboquest
+#
+# For a production build
+#
+#RUN git clone -b main https://github.com/billmania/roboquest_ui.git
 
-RUN git clone -b main https://github.com/billmania/roboquest_ui.git
+#
+# For a development build
+#
+RUN apt-get install -y \
+    iproute2 \
+    lsof \
+    net-tools
+WORKDIR /usr/src/ros2ws
+COPY src/roboquest_ui src/roboquest_ui/
+
 RUN git clone -b main https://github.com/billmania/rq_msgs.git
 WORKDIR /usr/src/ros2ws
 #
