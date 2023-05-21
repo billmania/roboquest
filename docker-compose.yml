@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  rq_core:
+    tty: true
+    image: rq/core
+    build:
+      context: ./ros2ws
+      dockerfile: Dockerfile.roboquest_core
+    network_mode: "host"
+    ipc: "host"
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/ttyS0:/dev/ttyS0"
+    volumes:
+      - "/dev/shm:/dev/shm"
+
+  rq_ui:
+    tty: true
+    image: rq/ui
+    build:
+      context: ./ros2ws
+      dockerfile: Dockerfile.roboquest_ui
+    network_mode: "host"
+    ipc: "host"
+    volumes:
+      - "/dev/shm:/dev/shm"

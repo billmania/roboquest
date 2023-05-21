@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="4"
+LABEL version="7"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -30,14 +30,23 @@ WORKDIR /usr/local
 RUN tar xzf /tmp/node-v18.16.0-linux-arm64.tar.gz
 RUN echo "PATH=$PATH:/usr/local/node-v18.16.0-linux-arm64/bin" >> /etc/profile
 
-RUN ln -sf /bin/bash /bin/sh
-RUN useradd -ms /bin/bash roboquest
-RUN chown roboquest /usr/src
-USER roboquest
-
 WORKDIR /usr/src/ros2ws/src
 
-RUN git clone -b main https://github.com/billmania/roboquest_ui.git
+#
+# For a PROD build
+#
+#RUN git clone -b main https://github.com/billmania/roboquest_ui.git
+
+#
+# For a DEV build
+#
+RUN apt-get install -y \
+    iproute2 \
+    lsof \
+    net-tools
+WORKDIR /usr/src/ros2ws
+COPY src/roboquest_ui src/roboquest_ui/
+
 RUN git clone -b main https://github.com/billmania/rq_msgs.git
 WORKDIR /usr/src/ros2ws
 #
@@ -53,7 +62,14 @@ WORKDIR /usr/src/ros2ws/src/roboquest_ui
 # includes the rclnodejs-cli module with its option to generate ROS
 # messages.
 #
-RUN npm i
+# DEV
+#
+RUN npm ci
+#
+# PROD
+#
+#RUN npm ci --omit=dev
+
 COPY src/roboquest_ui/generate_messages.sh generate_messages.sh
 RUN ./generate_messages.sh
 
@@ -65,4 +81,4 @@ WORKDIR /usr/src/ros2ws
 RUN colcon build --packages-select rq_msgs roboquest_ui
 
 WORKDIR /usr/src/ros2ws
-CMD ["/bin/bash", "--login"]
+ENTRYPOINT ["/bin/bash", "--login"]
