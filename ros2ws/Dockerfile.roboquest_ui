@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="6"
+LABEL version="7"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -33,12 +33,12 @@ RUN echo "PATH=$PATH:/usr/local/node-v18.16.0-linux-arm64/bin" >> /etc/profile
 WORKDIR /usr/src/ros2ws/src
 
 #
-# For a production build
+# For a PROD build
 #
 #RUN git clone -b main https://github.com/billmania/roboquest_ui.git
 
 #
-# For a development build
+# For a DEV build
 #
 RUN apt-get install -y \
     iproute2 \
