@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="6"
+LABEL version="7"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -38,3 +38,4 @@ RUN source /opt/ros/humble/setup.bash \
     && colcon build
 
 ENTRYPOINT ["/bin/bash", "--login"]
+CMD ["/usr/src/ros2ws/src/roboquest_core/scripts/start.sh"]

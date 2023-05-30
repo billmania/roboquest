@@ -23,7 +23,7 @@ each of two drive motors. Finally, it can set the position of
 sixteen servoes.
 
 Measurement and status information from the robot is sent to
-browser in a continuous stream. The browser extracts individual
+the browser in a continuous stream. The browser extracts individual
 values and uses them to update widgets on the page. The video
 frames are displayed as the background of the browser page.
 
