@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="7"
+LABEL version="8"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -82,3 +82,4 @@ RUN colcon build --packages-select rq_msgs roboquest_ui
 
 WORKDIR /usr/src/ros2ws
 ENTRYPOINT ["/bin/bash", "--login"]
+CMD ["/usr/src/ros2ws/src/roboquest_ui/scripts/start.sh"]
