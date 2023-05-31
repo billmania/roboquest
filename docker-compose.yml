@@ -1,5 +1,10 @@
 version: "3.3"
 
+#
+# restart can be tested by "exec"-ing to the container and issuing
+# kill -s SIGKILL -1
+#
+
 services:
   rq_core:
     tty: true
@@ -7,6 +12,7 @@ services:
     build:
       context: ./ros2ws
       dockerfile: Dockerfile.roboquest_core
+    restart: always
     network_mode: "host"
     ipc: "host"
     devices:
@@ -14,6 +20,7 @@ services:
       - "/dev/ttyS0:/dev/ttyS0"
     volumes:
       - "/dev/shm:/dev/shm"
+      - ros_logs:/root/.ros/log
 
   rq_ui:
     tty: true
@@ -21,7 +28,16 @@ services:
     build:
       context: ./ros2ws
       dockerfile: Dockerfile.roboquest_ui
+    restart: always
     network_mode: "host"
     ipc: "host"
     volumes:
       - "/dev/shm:/dev/shm"
+      - ros_logs:/root/.ros/log
+
+#
+# docker compose volume ros_logs
+#
+volumes:
+  ros_logs:
+    external: true
