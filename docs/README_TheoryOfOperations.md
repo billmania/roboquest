@@ -9,6 +9,17 @@ ability to control some servoes. Information from the sensors is
 displayed on the browser. The robot's actuators, both drive
 motors and servoes, can be controlled from the browser.
 
+## Logging
+
+Operating system log files are in /var/log. ROS log files are on
+the host OS in /var/lib/docker/volumes/ros_logs/_data. They're
+made available to the Docker containers as a docker volume named
+"ros_logs".
+
+Both the OS log files and the ROS log files are rotated aggressively,
+the former via logrotate and the latter via a few lines at the end of
+/etc/rc.local.
+
 ## Basic data flow
 
 The robot automatically and continuously publishes measurements
