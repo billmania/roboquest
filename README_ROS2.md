@@ -27,6 +27,7 @@ docker run -it --rm \
     --network host \
     --ipc host \
     -v /dev/shm:/dev/shm \
+    -v /var/run/dbus:/var/run/dbus \
     --device /dev/gpiomem \
     --device /dev/ttyS0 \
     --name roboquest_core \

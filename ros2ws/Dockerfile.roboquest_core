@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="7"
+LABEL version="8"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -25,7 +25,7 @@ RUN apt-get install -y \
     python3-smbus \
     python3-rpi.gpio \
     python3-serial \
-    python3-networkmanager \
+    network-manager \
     ros-humble-diagnostic-updater
 
 WORKDIR /usr/src/ros2ws
