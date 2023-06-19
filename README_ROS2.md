@@ -23,13 +23,14 @@ docker-compose build
     containers must execute as the same user, in order to use shared memory.
 
 ```
-docker run -it --rm \
+docker run -d --rm \
     --network host \
     --ipc host \
     -v /dev/shm:/dev/shm \
     -v /var/run/dbus:/var/run/dbus \
     --device /dev/gpiomem \
     --device /dev/ttyS0 \
+    --device /dev/video0 \
     --name roboquest_core \
     roboquest_core
 ```
@@ -37,3 +38,9 @@ docker run -it --rm \
 ```
 docker-compose up -d
 ```
+
+To manually start the USB camera node:
+ros2 run usb_cam usb_cam_node_exe
+
+To view the published frames from the USB camera, use rviz2 with
+"default_cam" as the frame and "/image_raw" as the topic.
