@@ -18,8 +18,10 @@ services:
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/ttyS0:/dev/ttyS0"
+      - "/dev/video0:/dev/video0"
     volumes:
       - "/dev/shm:/dev/shm"
+      - "/var/run/dbus:/var/run/dbus"
       - ros_logs:/root/.ros/log
 
   rq_ui:
