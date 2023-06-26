@@ -31,6 +31,7 @@ docker run -d --rm \
     --device /dev/gpiomem \
     --device /dev/ttyS0 \
     --device /dev/video0 \
+    --device /dev/i2c-1 \
     --name roboquest_core \
     roboquest_core
 ```
