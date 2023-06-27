@@ -1,11 +1,11 @@
 FROM ros:humble-ros-base
 
-LABEL version="8"
+LABEL version="10"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo "America/Los_Angeles" > /etc/timezone
+# TODO: Set the timezone
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
