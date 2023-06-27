@@ -1,19 +1,18 @@
 FROM ros:humble-ros-base
 
-LABEL version="9"
+LABEL version="10"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo "America/Los_Angeles" > /etc/timezone
+# TODO: Set the timezone
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
 RUN ln -sf /bin/bash /bin/sh
-RUN useradd -ms /bin/bash roboquest
-RUN chown roboquest /usr/src
 
 SHELL ["/bin/bash", "--login", "-c"]
+
 RUN apt-get update \
     && apt-get dist-upgrade -y
 RUN apt-get install -y \
@@ -24,12 +23,13 @@ RUN apt-get install -y \
     lsof
 RUN apt-get install -y \
     python3-colcon-ros \
-    python3-smbus \
     python3-rpi.gpio \
     python3-serial \
     network-manager \
     ros-humble-usb-cam \
     ros-humble-diagnostic-updater
+
+RUN apt-get install -y python3-pip && pip3 install smbus2
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
