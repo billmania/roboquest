@@ -20,6 +20,7 @@ services:
       - "/dev/ttyS0:/dev/ttyS0"
       - "/dev/video0:/dev/video0"
       - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/i2c-6:/dev/i2c-6"
     volumes:
       - "/dev/shm:/dev/shm"
       - "/var/run/dbus:/var/run/dbus"
