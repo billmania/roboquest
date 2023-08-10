@@ -1,11 +1,14 @@
 FROM ros:humble-ros-base
 
-LABEL version="10"
+LABEL version="11"
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
+#ENV ARCH="x64"
+ENV ARCH="arm64"
 
 # TODO: Set the timezone
+# TODO: Determine why a complete rebuild takes more than 1,000 seconds
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
@@ -20,21 +23,22 @@ RUN apt-get install -y \
     python3-colcon-ros
 
 WORKDIR /tmp
-RUN curl --output node-v18.16.0-linux-arm64.tar.gz \
-      https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-arm64.tar.gz \
+RUN curl --output node-v18.16.0-linux-${ARCH}.tar.gz \
+      https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-${ARCH}.tar.gz \
       && curl --output SHASUM256.txt \
            https://nodejs.org/dist/v18.16.0/SHASUMS256.txt
-RUN grep node-v18.16.0-linux-arm64.tar.gz SHASUM256.txt \
+RUN grep node-v18.16.0-linux-${ARCH}.tar.gz SHASUM256.txt \
       | sha256sum -c -
 WORKDIR /usr/local
-RUN tar xzf /tmp/node-v18.16.0-linux-arm64.tar.gz
-RUN echo "PATH=$PATH:/usr/local/node-v18.16.0-linux-arm64/bin" >> /etc/profile
+RUN tar xzf /tmp/node-v18.16.0-linux-${ARCH}.tar.gz
 
 WORKDIR /usr/src/ros2ws/src
+RUN git clone -b main https://github.com/billmania/rq_msgs.git
 
 #
 # For a PROD build
 #
+#WORKDIR /usr/src/ros2ws/src
 #RUN git clone -b main https://github.com/billmania/roboquest_ui.git
 
 #
@@ -47,38 +51,39 @@ RUN apt-get install -y \
 WORKDIR /usr/src/ros2ws
 COPY src/roboquest_ui src/roboquest_ui/
 
-RUN git clone -b main https://github.com/billmania/rq_msgs.git
 WORKDIR /usr/src/ros2ws
 #
 # The rq_msgs package must be built so the messages and services are
-# available to the generate_messages.sh script.
+# available for the generate_messages.sh script.
 #
 RUN colcon build --packages-select rq_msgs
 
-ENV PATH="${PATH}:/usr/local/node-v18.16.0-linux-arm64/bin"
+ENV PATH="${PATH}:/usr/local/node-v18.16.0-linux-${ARCH}/bin"
 WORKDIR /usr/src/ros2ws/src/roboquest_ui
 #
 # Now the NodeJS modules required by roboquest_ui must be installed. This
 # includes the rclnodejs-cli module with its option to generate ROS
 # messages.
-#
-# DEV
-#
-RUN npm ci
+
 #
 # PROD
 #
 #RUN npm ci --omit=dev
 
+#
+# DEV
+#
+RUN npm ci
+
 COPY src/roboquest_ui/generate_messages.sh generate_messages.sh
-RUN ./generate_messages.sh
+RUN ./generate_messages.sh ${ARCH}
 
 #
 # And finally the roboquest_ui package can be built and installed. The
 # process installs all of the necessary rclnodejs components.
 #
 WORKDIR /usr/src/ros2ws
-RUN colcon build --packages-select rq_msgs roboquest_ui
+RUN colcon build --packages-select roboquest_ui
 
 WORKDIR /usr/src/ros2ws
 ENTRYPOINT ["/bin/bash", "--login"]
