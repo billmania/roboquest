@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="11"
+LABEL version="12"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -26,10 +26,24 @@ RUN apt-get install -y \
     python3-rpi.gpio \
     python3-serial \
     network-manager \
-    ros-humble-usb-cam \
     ros-humble-diagnostic-updater
-
 RUN apt-get install -y python3-pip && pip3 install smbus2
+RUN apt-get update \
+    && apt-get install -y \
+      libyaml-dev \
+      python3-yaml \
+      python3-ply \
+      python3-jinja2 \
+      libevent-dev \
+      ros-humble-camera-ros
+
+#RUN apt-get install -y meson
+#WORKDIR /usr/src
+#RUN git clone https://git.libcamera.org/libcamera/libcamera.git
+#WORKDIR /usr/src/libcamera
+#RUN meson setup build \
+#    && (cd build ; meson configure -Dcam=enabled -Dudev=disabled) \
+#    && ninja -C build install
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
