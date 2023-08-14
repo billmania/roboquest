@@ -35,15 +35,15 @@ RUN apt-get update \
       python3-ply \
       python3-jinja2 \
       libevent-dev \
-      meson \
       ros-humble-camera-ros
 
-WORKDIR /usr/src
-RUN git clone https://git.libcamera.org/libcamera/libcamera.git
-WORKDIR /usr/src/libcamera
-RUN meson setup build \
-    && (cd build ; meson configure -Dcam=enabled -Dudev=disabled) \
-    && ninja -C build install
+#RUN apt-get install -y meson
+#WORKDIR /usr/src
+#RUN git clone https://git.libcamera.org/libcamera/libcamera.git
+#WORKDIR /usr/src/libcamera
+#RUN meson setup build \
+#    && (cd build ; meson configure -Dcam=enabled -Dudev=disabled) \
+#    && ninja -C build install
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src

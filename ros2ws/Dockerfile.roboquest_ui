@@ -8,7 +8,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV ARCH="arm64"
 
 # TODO: Set the timezone
-# TODO: Determine why a complete rebuild takes more than 1,000 seconds
+# TODO: 322 seconds for complete --no-cache build on x86_64 multi-core
+# TODO: 2,047 seconds for complete --no-cache build on arm64 multi-core
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
