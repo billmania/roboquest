@@ -76,6 +76,9 @@ WORKDIR /usr/src/ros2ws/src/roboquest_ui
 #
 RUN npm ci
 
+WORKDIR /usr/src/ros2ws/src/roboquest_ui/public
+RUN npm ci
+
 COPY src/roboquest_ui/generate_messages.sh generate_messages.sh
 RUN ./generate_messages.sh ${ARCH}
 
