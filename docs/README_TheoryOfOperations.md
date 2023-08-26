@@ -58,7 +58,7 @@ Docker version 23.0.5.
 The robotics framework is ROS2 Humble running in several Docker
 containers. The programming languages are Python 3.9 and
 ECMAScript 5 (I think) with Google V8 version 10. The server side
-JavaScript is executed by NodeJS Hydrogen (18) and uses rclnodejs
+JavaScript is executed by NodeJS Hydrogen (18.17.1) and uses rclnodejs
 version 0.22.1.
 
 Communications with the browser use ExpressJS version 4.18.2 and
