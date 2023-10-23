@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="15.1"
+LABEL version="17"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
