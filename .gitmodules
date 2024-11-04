@@ -7,3 +7,6 @@
 [submodule "ros2ws/src/rq_msgs"]
 	path = ros2ws/src/rq_msgs
 	url = https://github.com/billmania/rq_msgs.git
+[submodule "ros2ws/src/roboquest_addons"]
+	path = ros2ws/src/roboquest_addons
+	url = git@github.com:billmania/roboquest_addons.git

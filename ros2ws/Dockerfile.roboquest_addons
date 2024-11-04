@@ -1,0 +1,28 @@
+FROM ros:humble-ros-base
+
+LABEL version="1rc1"
+LABEL description="ROS2 RoboQuest addons"
+LABEL maintainer="Bill Mania <bill@manialabs.us>"
+ARG DEBIAN_FRONTEND=noninteractive
+ENV ARCH="arm64"
+#ENV ARCH="x64"
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
+
+RUN ln -sf /bin/bash /bin/sh
+
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN apt-get update \
+    && apt-get dist-upgrade -y
+
+WORKDIR /usr/src/ros2ws/src
+RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
+WORKDIR /usr/src/ros2ws
+COPY src/roboquest_addons src/roboquest_addons
+
+RUN source /opt/ros/humble/setup.bash \
+    && colcon build --symlink-install
+
+ENTRYPOINT ["/bin/bash", "--login"]
+CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/start.sh"]
