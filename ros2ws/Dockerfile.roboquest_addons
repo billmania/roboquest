@@ -1,7 +1,7 @@
-#FROM ros:humble-ros-base
-FROM ubuntu:noble
+FROM ros:humble-ros-base
+#FROM ubuntu:noble
 
-LABEL version="3rc1"
+LABEL version="3"
 LABEL description="ROS2 RoboQuest addons"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
