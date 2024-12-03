@@ -1,11 +1,12 @@
-FROM ros:humble-ros-base
+#FROM ros:humble-ros-base
+FROM ubuntu:noble
 
-LABEL version="2"
+LABEL version="3rc1"
 LABEL description="ROS2 RoboQuest addons"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
+#RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
 RUN ln -sf /bin/bash /bin/sh
 
@@ -13,15 +14,58 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 RUN apt-get update \
     && apt-get upgrade -y
-RUN apt-get install -y ros-humble-apriltag-ros
+RUN apt-get install -y \
+    vim
 
-WORKDIR /usr/src/ros2ws/src
-RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
-WORKDIR /usr/src/ros2ws
-COPY src/roboquest_addons src/roboquest_addons
+#
+# For recognizing APRIL tags.
+#
+# requires FROM ros:humble-ros-base
+#WORKDIR /usr/src/ros2ws
+#RUN apt-get install -y ros-humble-apriltag-ros
 
-RUN source /opt/ros/humble/setup.bash \
-    && colcon build --symlink-install
+#
+# For the SLAMTEC RPLiDAR unit.
+#
+# requires FROM ros:humble-ros-base
+#RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
+#WORKDIR /usr/src/ros2ws
+#COPY src/roboquest_addons src/roboquest_addons
+#RUN source /opt/ros/humble/setup.bash \
+#    && colcon build --symlink-install
+
+
+#
+# For the VL53L0X I2C range-finding sensor
+#
+# requires FROM ubuntu:noble
+#RUN apt-get install -y \
+#    python3-rpi.gpio \
+#    python3-smbus2 \
+#    python3-pip \
+#    i2c-tools \
+#    lsof
+#
+# The following is actually
+# https://github.com/Gadgetoid/VL53L0X-python.git, which itself
+# is a fork of
+# https://github.com/johnbryanmoore/VL53L0X_rasp_python
+#
+#RUN pip3 install git+https://github.com/pimoroni/VL53L0X-python.git
+
+#
+# For the MLX90614 temperature sensor
+#
+# requires FROM ubuntu:noble
+RUN apt-get install -y \
+    python3-pip \
+    python3-venv \
+    i2c-tools \
+    lsof
+WORKDIR /usr/src
+COPY src/roboquest_addons roboquest_addons
+RUN python3 -m venv venv
+RUN source venv/bin/activate ; pip3 install PyMLX90614 smbus2 RPi.GPIO
 
 ENTRYPOINT ["/bin/bash", "--login"]
-CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/start.sh"]
+#CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/start.sh"]
