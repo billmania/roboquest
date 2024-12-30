@@ -1,0 +1,37 @@
+FROM ros:humble-ros-base
+
+LABEL version="1"
+LABEL description="ROS2 Roboquest Autonomy Demo"
+LABEL maintainer="Bill Mania <bill@manialabs.us>"
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
+
+RUN ln -sf /bin/bash /bin/sh
+
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN apt-get update \
+    && apt-get upgrade -y
+RUN apt-get install -y \
+    vim
+
+#
+# For recognizing APRIL tags.
+#
+# requires FROM ros:humble-ros-base
+WORKDIR /usr/src/ros2ws
+RUN apt-get install -y ros-humble-apriltag-ros
+
+#
+# For the SLAMTEC RPLiDAR unit.
+#
+# requires FROM ros:humble-ros-base
+WORKDIR /usr/src/ros2ws
+RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
+COPY src/roboquest_addons src/roboquest_addons
+RUN source /opt/ros/humble/setup.bash \
+    && colcon build
+
+ENTRYPOINT ["/bin/bash", "--login"]
+#CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/autonomy_demo.sh"]
