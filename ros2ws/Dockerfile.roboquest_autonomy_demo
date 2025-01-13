@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="1"
+LABEL version="4rc1"
 LABEL description="ROS2 Roboquest Autonomy Demo"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -30,8 +30,9 @@ RUN apt-get install -y ros-humble-apriltag-ros
 WORKDIR /usr/src/ros2ws
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 COPY src/roboquest_addons src/roboquest_addons
+COPY src/rq_msgs rq_msgs
 RUN source /opt/ros/humble/setup.bash \
     && colcon build
 
 ENTRYPOINT ["/bin/bash", "--login"]
-#CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/autonomy_demo.sh"]
+CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/autonomy_demo.sh"]
