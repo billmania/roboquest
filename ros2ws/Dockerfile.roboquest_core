@@ -39,6 +39,7 @@ RUN apt-get update \
 RUN pip3 install smbus2 PyMLX90614
 
 WORKDIR /root/.ros/camera_info
+<<<<<<< HEAD
 #
 # These depend on the specific cameras connected to a specific port
 #
