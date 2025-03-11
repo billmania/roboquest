@@ -1,11 +1,9 @@
 FROM ros:humble-ros-base
 
-LABEL version="24"
+LABEL version="25"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
-
-# TODO: Set the timezone
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
@@ -39,6 +37,9 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y python3-pip
 RUN pip3 install smbus2
+
+WORKDIR /root/.ros/camera_info
+COPY src/roboquest_core/config/rq_camera_node0.yaml ArducamUSBCamera_ArducamUSB__base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_1_1_0_0c45_6366_640x480.yaml
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
