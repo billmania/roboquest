@@ -39,7 +39,8 @@ RUN apt-get update \
 RUN pip3 install smbus2
 
 WORKDIR /root/.ros/camera_info
-COPY src/roboquest_core/config/rq_camera_node0.yaml ArducamUSBCamera_ArducamUSB__base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_1_1_0_0c45_6366_640x480.yaml
+COPY src/roboquest_core/config/rq_camera_node0.yaml ArducamUSBCamera_ArducamUSB__base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_1_1_0_0c45_6366_1280x960.yaml
+COPY src/roboquest_core/config/ov5647_1280x960_calibration.yaml ov5647__base_soc_i2c0mux_i2c_1_ov5647_36_1280x960.yaml
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
