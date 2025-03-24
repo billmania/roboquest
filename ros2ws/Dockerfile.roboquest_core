@@ -1,6 +1,6 @@
 FROM ros:humble-ros-base
 
-LABEL version="24"
+LABEL version="25rc1"
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -38,7 +38,7 @@ RUN apt-get update \
       ros-humble-usb-cam
 RUN apt-get update \
     && apt-get install -y python3-pip
-RUN pip3 install smbus2
+RUN pip3 install smbus2 PyMLX90614
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
