@@ -36,7 +36,7 @@ RUN apt-get update \
       ros-humble-usb-cam
 RUN apt-get update \
     && apt-get install -y python3-pip
-RUN pip3 install smbus2
+RUN pip3 install smbus2 PyMLX90614
 
 WORKDIR /root/.ros/camera_info
 #
