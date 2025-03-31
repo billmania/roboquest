@@ -1,11 +1,12 @@
 FROM ros:humble-ros-base
 
-LABEL version="25rc1"
+# see https://github.com/billmania/roboquest/wiki/roboquest-wiki
+LABEL version="25"
+# see https://github.com/billmania/roboquest/wiki/roboquest-wiki
+
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
-
-# TODO: Set the timezone
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
@@ -39,6 +40,14 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y python3-pip
 RUN pip3 install smbus2 PyMLX90614
+
+WORKDIR /root/.ros/camera_info
+#
+# These depend on the specific cameras connected to a specific port
+#
+COPY src/roboquest_core/config/ov5647_1280x960_calibration.yaml ov5647__base_soc_i2c0mux_i2c_1_ov5647_36_1280x960.yaml
+COPY src/roboquest_core/config/arducam_1280x720_calibration.yaml ArducamUSBCamera_ArducamUSB__base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_3_1_0_0c45_6366_1280x720.yaml
+COPY src/roboquest_core/config/quickcampro9000.yaml UVCCamera_046d_0990___base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_3_1_0_046d_0990_1600x1200.yaml
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
