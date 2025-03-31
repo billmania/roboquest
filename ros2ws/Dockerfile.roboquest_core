@@ -1,6 +1,9 @@
 FROM ros:humble-ros-base
 
+# see https://github.com/billmania/roboquest/wiki/roboquest-wiki
 LABEL version="25"
+# see https://github.com/billmania/roboquest/wiki/roboquest-wiki
+
 LABEL description="ROS2 RoboQuest core"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
