@@ -1,7 +1,7 @@
 FROM ros:humble-ros-base
 
 # see https://github.com/billmania/roboquest/wiki/roboquest-wiki
-LABEL version="35.1"
+LABEL version="36"
 # see https://github.com/billmania/roboquest/wiki/roboquest-wiki
 
 LABEL description="ROS2 RoboQuest frontend"
