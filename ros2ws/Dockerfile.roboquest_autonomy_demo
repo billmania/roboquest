@@ -11,17 +11,14 @@ RUN ln -sf /bin/bash /bin/sh
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN apt-get update \
-    && apt-get upgrade -y
+RUN apt-get update
+RUN apt-get upgrade -y
 RUN apt-get install -y \
+    ros-humble-xacro \
+    ros-humble-apriltag-ros \
+    ros-humble-joint-state-publisher \
+    ros-humble-robot-state-publisher \
     vim
-
-#
-# For recognizing APRIL tags.
-#
-# requires FROM ros:humble-ros-base
-WORKDIR /usr/src/ros2ws
-RUN apt-get install -y ros-humble-apriltag-ros
 
 #
 # For the SLAMTEC RPLiDAR unit.

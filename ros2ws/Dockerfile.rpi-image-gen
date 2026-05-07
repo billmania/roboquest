@@ -1,0 +1,24 @@
+FROM arm64v8/debian:trixie-slim
+
+LABEL version="1"
+LABEL description="rpi-image-gen"
+LABEL maintainer="Bill Mania <bill@manialabs.us>"
+ARG DEBIAN_FRONTEND=noninteractive
+ARG BASEDIR="/opt"
+
+RUN apt-get update \
+    && apt-get dist-upgrade -y
+
+RUN apt-get install -y \
+    git \
+    tree \
+    vim
+
+WORKDIR $BASEDIR
+RUN git clone https://github.com/raspberrypi/rpi-image-gen.git
+
+WORKDIR $BASEDIR/rpi-image-gen
+RUN ./install_deps.sh
+COPY src/roboquest_addons/rpi-image-gen $BASEDIR/rpi-image-gen/
+
+ENTRYPOINT ["/bin/bash", "--login"]
