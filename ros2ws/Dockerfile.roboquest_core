@@ -45,10 +45,10 @@ WORKDIR /root/.ros/camera_info
 #
 # These depend on the specific cameras connected to a specific port
 #
-COPY src/roboquest_core/config/ov5647_1296x972_calibration.yaml ov5647__base_soc_i2c0mux_i2c_1_ov5647_36_1296x972.yaml
-COPY src/roboquest_core/config/ov5647CSI_1296x972_calibration.yaml ov5647__base_soc_i2c0mux_i2c_1_ov5647_36_1296x972.yaml
+# The ArduCam RaspPi camera module connected to the CSI port.
+COPY src/roboquest_core/config/ov5647_640x480_calibration.yaml ov5647__base_soc_i2c0mux_i2c_1_ov5647_36_640x480.yaml
+# The ArduCam USB module
 COPY src/roboquest_core/config/arducam_1296x972_calibration.yaml ArducamUSBCamera_ArducamUSB__base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_3_1_0_0c45_6366_1296x972.yaml
-COPY src/roboquest_core/config/quickcampro9000.yaml UVCCamera_046d_0990___base_scb_pcie_7d500000_pci_0_0_usb_0_0_1_3_1_0_046d_0990_1600x1200.yaml
 
 WORKDIR /usr/src/ros2ws
 RUN mkdir src
