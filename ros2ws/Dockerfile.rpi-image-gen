@@ -1,6 +1,11 @@
 FROM arm64v8/debian:trixie-slim
 
-LABEL version="2"
+#
+# Changing the version here requires a change in
+# rq-lidar-april/image/rq-partitions/bdebstrap/customize30-configure
+#
+LABEL version="3"
+
 LABEL description="rpi-image-gen"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -21,5 +26,6 @@ RUN ./install_deps.sh
 WORKDIR /opt
 RUN git clone https://github.com/billmania/roboquest_addons.git
 RUN ln -s /opt/roboquest_addons/rpi-image-gen/rq-lidar-april /opt/rpi-image-gen/rq-lidar-april
+WORKDIR /opt/rpi-image-gen
 
 ENTRYPOINT ["/bin/bash", "--login"]
