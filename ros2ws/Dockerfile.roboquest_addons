@@ -38,4 +38,4 @@ RUN source /opt/ros/humble/setup.bash \
     && colcon build --symlink-install
 
 ENTRYPOINT ["/bin/bash", "--login"]
-#CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/start.sh"]
+CMD ["/usr/src/ros2ws/src/roboquest_addons/scripts/autonomy_demo.sh"]
