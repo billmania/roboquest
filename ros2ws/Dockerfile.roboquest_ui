@@ -1,19 +1,15 @@
 FROM ros:humble-ros-base
 
 # see https://github.com/billmania/roboquest/wiki/roboquest-wiki
-LABEL version="36"
+LABEL version="37rc2dev"
 # see https://github.com/billmania/roboquest/wiki/roboquest-wiki
 
 LABEL description="ROS2 RoboQuest frontend"
 LABEL maintainer="Bill Mania <bill@manialabs.us>"
 ARG DEBIAN_FRONTEND=noninteractive
-#ENV ARCH="x64"
-ENV ARCH="arm64"
-ENV NODE_VERSION="18.18.0"
+ARG NODE_VERSION=24.21.0
 
 # TODO: Set the timezone
-# TODO: 322 seconds for complete --no-cache build on x86_64 multi-core
-# TODO: 2,047 seconds for complete --no-cache build on arm64 multi-core
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile
 
@@ -27,28 +23,15 @@ RUN apt-get install -y \
 RUN apt-get install -y \
     python3-colcon-ros
 
-WORKDIR /tmp
-RUN curl --output node-v${NODE_VERSION}-linux-${ARCH}.tar.gz \
-      https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.gz \
-      && curl --output SHASUM256.txt \
-           https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt
-RUN grep node-v${NODE_VERSION}-linux-${ARCH}.tar.gz SHASUM256.txt \
-      | sha256sum -c -
-WORKDIR /usr/local
-RUN tar xzf /tmp/node-v${NODE_VERSION}-linux-${ARCH}.tar.gz
+WORKDIR /root
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+ENV NVM_DIR="/root/.nvm"
+RUN bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
+
+RUN echo 24.21.0 > ~/.nvmrc
 
 WORKDIR /usr/src/ros2ws/src
 
-#
-# For a PROD build
-#
-#WORKDIR /usr/src/ros2ws/src
-#RUN git clone -b main https://github.com/billmania/rq_msgs.git
-#RUN git clone -b main https://github.com/billmania/roboquest_ui.git
-
-#
-# For a DEV build
-#
 RUN apt-get install -y \
     iproute2 \
     lsof \
@@ -58,41 +41,22 @@ COPY src/rq_msgs src/rq_msgs/
 COPY src/roboquest_ui src/roboquest_ui/
 
 WORKDIR /usr/src/ros2ws
-#
-# The rq_msgs package must be built so the messages and services are
-# available for the generate_messages.sh script.
-#
 RUN colcon build --packages-select rq_msgs
 
-ENV PATH="${PATH}:/usr/local/node-v${NODE_VERSION}-linux-${ARCH}/bin"
+#
+# Install the Javascript libraries, for the NodeJS server and
+# the browser logic.
+#
 WORKDIR /usr/src/ros2ws/src/roboquest_ui
-#
-# Now the NodeJS modules required by roboquest_ui must be installed. This
-# includes the rclnodejs-cli module with its option to generate ROS
-# messages.
-
-#
-# PROD
-#
-#RUN npm ci --omit=dev
-
-#
-# DEV
-#
-RUN npm ci
-
+RUN bash -c "source /opt/ros/humble/setup.bash && source $NVM_DIR/nvm.sh && npm install"
 WORKDIR /usr/src/ros2ws/src/roboquest_ui/public
-RUN npm ci
+RUN bash -c "source /opt/ros/humble/setup.bash && source $NVM_DIR/nvm.sh && npm install"
 
-COPY src/roboquest_ui/generate_messages.sh generate_messages.sh
-RUN ./generate_messages.sh ${ARCH} ${NODE_VERSION}
-
-#
-# And finally the roboquest_ui package can be built and installed. The
-# process installs all of the necessary rclnodejs components.
-#
 WORKDIR /usr/src/ros2ws
 RUN colcon build --packages-select roboquest_ui
+
+WORKDIR /usr/src/ros2ws/src/roboquest_ui
+RUN bash -c "source /opt/ros/humble/setup.bash && source $NVM_DIR/nvm.sh && npx generate-ros-messages"
 
 WORKDIR /usr/src/ros2ws
 ENTRYPOINT ["/bin/bash", "--login"]
